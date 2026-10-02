@@ -63,19 +63,27 @@ export function DashboardTable() {
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-black tracking-wider text-blue-400 uppercase">CUSTODIA ELECTORAL</span>
+              <span className="text-sm font-black tracking-wider text-blue-400 uppercase">
+                CUSTODIA ELECTORAL
+              </span>
               <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] px-2 py-0.5">
                 ● ONLINE
               </Badge>
             </div>
-            <span className="text-xs text-slate-400 font-medium">Panel de Control y Resumen de Mesas</span>
+            <span className="text-xs text-slate-400 font-medium">
+              Panel de Control y Resumen de Mesas
+            </span>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex flex-col text-right">
-            <span className="text-xs font-bold text-white">{user?.NombreCompleto || "Personero Acreditado"}</span>
-            <span className="text-[11px] text-slate-400">DNI: {user?.DNI || "--------"}</span>
+            <span className="text-xs font-bold text-white">
+              {user?.NombreCompleto || "Personero Acreditado"}
+            </span>
+            <span className="text-[11px] text-slate-400">
+              DNI: {user?.DNI || "--------"}
+            </span>
           </div>
           <Button
             variant="ghost"
@@ -100,12 +108,16 @@ export function DashboardTable() {
                 Resumen de Escrutinio por Mesa
               </h1>
               <p className="text-xs text-slate-500 font-medium mt-0.5">
-                Consolidado de mesas de sufragio, votos por candidato y evidencias gráficas
+                Consolidado de mesas de sufragio, votos por candidato y
+                evidencias gráficas
               </p>
             </div>
 
             {/* Search Form */}
-            <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
+            <form
+              onSubmit={handleSearchSubmit}
+              className="flex items-center gap-2"
+            >
               <div className="relative flex items-center">
                 <Search className="absolute left-3 size-4 text-slate-400 pointer-events-none" />
                 <Input
@@ -125,7 +137,10 @@ export function DashboardTable() {
                   </button>
                 ) : null}
               </div>
-              <Button type="submit" className="h-10 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl px-4">
+              <Button
+                type="submit"
+                className="h-10 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl px-4"
+              >
                 Buscar
               </Button>
             </form>
@@ -137,21 +152,39 @@ export function DashboardTable() {
           ) : data.length === 0 ? (
             <div className="p-12 text-center flex flex-col items-center justify-center gap-2 bg-slate-50 rounded-2xl border border-slate-200/80">
               <Building2 className="size-10 text-slate-400" />
-              <span className="text-sm font-bold text-slate-800">No se encontraron mesas</span>
-              <p className="text-xs text-slate-500">Pruebe ingresando otro número de mesa en el buscador.</p>
+              <span className="text-sm font-bold text-slate-800">
+                No se encontraron mesas
+              </span>
+              <p className="text-xs text-slate-500">
+                Pruebe ingresando otro número de mesa en el buscador.
+              </p>
             </div>
           ) : (
             <div className="w-full bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-2xs">
               <Table>
                 <TableHeader className="bg-slate-950">
                   <TableRow className="hover:bg-slate-950 border-slate-800">
-                    <TableHead className="text-white font-extrabold text-xs">MESA N°</TableHead>
-                    <TableHead className="text-white font-extrabold text-xs">LOCAL DE VOTACIÓN</TableHead>
-                    <TableHead className="text-white font-extrabold text-xs">DISTRITO</TableHead>
-                    <TableHead className="text-white font-extrabold text-xs text-center">ELECTORES</TableHead>
-                    <TableHead className="text-white font-extrabold text-xs text-center">ESTADO ACTA</TableHead>
-                    <TableHead className="text-white font-extrabold text-xs text-center">EVIDENCIAS</TableHead>
-                    <TableHead className="text-white font-extrabold text-xs text-right">DETALLES</TableHead>
+                    <TableHead className="text-white font-extrabold text-xs">
+                      MESA N°
+                    </TableHead>
+                    <TableHead className="text-white font-extrabold text-xs">
+                      LOCAL DE VOTACIÓN
+                    </TableHead>
+                    <TableHead className="text-white font-extrabold text-xs">
+                      DISTRITO
+                    </TableHead>
+                    <TableHead className="text-white font-extrabold text-xs text-center">
+                      ELECTORES
+                    </TableHead>
+                    <TableHead className="text-white font-extrabold text-xs text-center">
+                      ESTADO ACTA
+                    </TableHead>
+                    <TableHead className="text-white font-extrabold text-xs text-center">
+                      EVIDENCIAS
+                    </TableHead>
+                    <TableHead className="text-white font-extrabold text-xs text-right">
+                      DETALLES
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -161,7 +194,10 @@ export function DashboardTable() {
                     const isProcesado = escrutinio?.EstadoActa === "PROCESADO";
 
                     return (
-                      <TableRow key={item.Numero_Mesa} className="hover:bg-slate-50/80 border-b border-slate-100 transition-colors">
+                      <TableRow
+                        key={item.Numero_Mesa}
+                        className="hover:bg-slate-50/80 border-b border-slate-100 transition-colors"
+                      >
                         {/* Mesa N° */}
                         <TableCell className="font-extrabold text-slate-900 text-sm">
                           {item.Numero_Mesa}
@@ -207,12 +243,17 @@ export function DashboardTable() {
                         {/* Evidencias */}
                         <TableCell className="text-center">
                           {imagenesCount > 0 ? (
-                            <Badge variant="secondary" className="bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-flex gap-1">
+                            <Badge
+                              variant="secondary"
+                              className="bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-flex gap-1"
+                            >
                               <ImageIcon className="size-3 text-blue-600" />
                               {imagenesCount} Fotos
                             </Badge>
                           ) : (
-                            <span className="text-xs text-slate-400 font-medium">Sin fotos</span>
+                            <span className="text-xs text-slate-400 font-medium">
+                              Sin fotos
+                            </span>
                           )}
                         </TableCell>
 
@@ -239,7 +280,8 @@ export function DashboardTable() {
           {/* Pagination Controls */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-xs text-slate-500 font-medium">
             <span>
-              Mostrando <strong>{metadata.itemCount}</strong> de <strong>{metadata.totalItems}</strong> mesas encontradas
+              Mostrando <strong>{metadata.itemCount}</strong> de{" "}
+              <strong>{metadata.totalItems}</strong> mesas encontradas
             </span>
 
             <div className="flex items-center gap-2">
@@ -274,7 +316,10 @@ export function DashboardTable() {
       </Card>
 
       {/* Modal Detail Dialog */}
-      <Dialog open={Boolean(selectedMesa)} onOpenChange={(open) => !open && setSelectedMesa(null)}>
+      <Dialog
+        open={Boolean(selectedMesa)}
+        onOpenChange={(open) => !open && setSelectedMesa(null)}
+      >
         <DialogContent className="max-w-2xl sm:max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-6 sm:p-8 gap-6 border border-slate-200 shadow-2xl">
           <DialogHeader className="pb-3 border-b border-slate-100">
             <DialogTitle className="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2.5">
@@ -290,7 +335,9 @@ export function DashboardTable() {
                 <span className="font-black text-slate-900 text-base sm:text-lg leading-snug">
                   {selectedMesa.Nombre_Local}
                 </span>
-                <span className="text-slate-600 font-semibold">{selectedMesa.Direccion}</span>
+                <span className="text-slate-600 font-semibold">
+                  {selectedMesa.Direccion}
+                </span>
                 <span className="text-xs text-slate-500 font-extrabold uppercase tracking-wide">
                   {selectedMesa.Distrito} • {selectedMesa.Local}
                 </span>
@@ -298,60 +345,97 @@ export function DashboardTable() {
 
               {/* Resumen Escrutinio Cabecera */}
               <div className="flex flex-col gap-3">
-                <span className="font-extrabold text-slate-900 text-sm">Resumen de Sufragio:</span>
+                <span className="font-extrabold text-slate-900 text-sm">
+                  Resumen de Sufragio:
+                </span>
                 {selectedMesa.escrutinioMesa ? (
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
                     <div className="bg-slate-100/80 p-3.5 rounded-2xl flex flex-col items-center justify-center border border-slate-200/60">
-                      <span className="text-xs text-slate-500 font-semibold">Votaron</span>
-                      <span className="text-xl font-black text-slate-900 mt-0.5">{selectedMesa.escrutinioMesa.TotalCiudadanosVotaron}</span>
+                      <span className="text-xs text-slate-500 font-semibold">
+                        Votaron
+                      </span>
+                      <span className="text-xl font-black text-slate-900 mt-0.5">
+                        {selectedMesa.escrutinioMesa.TotalCiudadanosVotaron}
+                      </span>
                     </div>
                     <div className="bg-slate-100/80 p-3.5 rounded-2xl flex flex-col items-center justify-center border border-slate-200/60">
-                      <span className="text-xs text-slate-500 font-semibold">Blancos</span>
-                      <span className="text-xl font-black text-slate-900 mt-0.5">{selectedMesa.escrutinioMesa.VotosBlancos}</span>
+                      <span className="text-xs text-slate-500 font-semibold">
+                        Blancos
+                      </span>
+                      <span className="text-xl font-black text-slate-900 mt-0.5">
+                        {selectedMesa.escrutinioMesa.VotosBlancos}
+                      </span>
                     </div>
                     <div className="bg-slate-100/80 p-3.5 rounded-2xl flex flex-col items-center justify-center border border-slate-200/60">
-                      <span className="text-xs text-slate-500 font-semibold">Nulos</span>
-                      <span className="text-xl font-black text-slate-900 mt-0.5">{selectedMesa.escrutinioMesa.VotosNulos}</span>
+                      <span className="text-xs text-slate-500 font-semibold">
+                        Nulos
+                      </span>
+                      <span className="text-xl font-black text-slate-900 mt-0.5">
+                        {selectedMesa.escrutinioMesa.VotosNulos}
+                      </span>
                     </div>
                     <div className="bg-slate-100/80 p-3.5 rounded-2xl flex flex-col items-center justify-center border border-slate-200/60">
-                      <span className="text-xs text-slate-500 font-semibold">Impugnados</span>
-                      <span className="text-xl font-black text-slate-900 mt-0.5">{selectedMesa.escrutinioMesa.VotosImpugnados}</span>
+                      <span className="text-xs text-slate-500 font-semibold">
+                        Impugnados
+                      </span>
+                      <span className="text-xl font-black text-slate-900 mt-0.5">
+                        {selectedMesa.escrutinioMesa.VotosImpugnados}
+                      </span>
+                    </div>
+                    <div className="bg-slate-100/80 p-3.5 rounded-2xl flex flex-col items-center justify-center border border-slate-200/60">
+                      <span className="text-xs text-slate-500 font-semibold">
+                        Impugnados De Somos Perú
+                      </span>
+                      <span className="text-xl font-black text-slate-900 mt-0.5">
+                        {selectedMesa.escrutinioMesa.votosImpugnadosSp}
+                      </span>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-slate-400 italic">No se ha registrado escrutinio para esta mesa.</p>
+                  <p className="text-slate-400 italic">
+                    No se ha registrado escrutinio para esta mesa.
+                  </p>
                 )}
               </div>
 
               {/* Votos por Candidato / Partido */}
-              {selectedMesa.escrutinioMesa?.votosCandidatoes && selectedMesa.escrutinioMesa.votosCandidatoes.length > 0 ? (
+              {selectedMesa.escrutinioMesa?.votosCandidatoes &&
+              selectedMesa.escrutinioMesa.votosCandidatoes.length > 0 ? (
                 <div className="flex flex-col gap-3">
-                  <span className="font-extrabold text-slate-900 text-sm">Votos por Candidato y Agrupación:</span>
+                  <span className="font-extrabold text-slate-900 text-sm">
+                    Votos por Candidato y Agrupación:
+                  </span>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {selectedMesa.escrutinioMesa.votosCandidatoes.map((voto) => (
-                      <div
-                        key={voto.IdVoto}
-                        className="bg-white border border-slate-200/90 rounded-2xl p-3.5 flex items-center justify-between shadow-2xs gap-3"
-                      >
-                        <div className="flex items-center gap-3 min-w-0 flex-1">
-                          <div className="size-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 text-blue-600">
-                            <UserCheck className="size-5" />
+                    {selectedMesa.escrutinioMesa.votosCandidatoes.map(
+                      (voto) => (
+                        <div
+                          key={voto.IdVoto}
+                          className="bg-white border border-slate-200/90 rounded-2xl p-3.5 flex items-center justify-between shadow-2xs gap-3"
+                        >
+                          <div className="flex items-center gap-3 min-w-0 flex-1">
+                            <div className="size-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 text-blue-600">
+                              <UserCheck className="size-5" />
+                            </div>
+                            <div className="flex flex-col min-w-0 flex-1">
+                              <span className="font-bold text-xs sm:text-sm text-slate-900 truncate leading-snug">
+                                {voto.candidato.NombreCompleto}
+                              </span>
+                              <span className="text-xs text-slate-500 truncate font-medium">
+                                {voto.candidato.partidosPolitico.NombrePartido}{" "}
+                                ({voto.candidato.partidosPolitico.Siglas})
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex flex-col min-w-0 flex-1">
-                            <span className="font-bold text-xs sm:text-sm text-slate-900 truncate leading-snug">
-                              {voto.candidato.NombreCompleto}
-                            </span>
-                            <span className="text-xs text-slate-500 truncate font-medium">
-                              {voto.candidato.partidosPolitico.NombrePartido} ({voto.candidato.partidosPolitico.Siglas})
-                            </span>
-                          </div>
-                        </div>
 
-                        <Badge variant="secondary" className="bg-slate-100 text-slate-900 border border-slate-200 font-extrabold text-xs sm:text-sm px-3 py-1 rounded-xl shrink-0">
-                          {voto.CantidadVotos} Votos
-                        </Badge>
-                      </div>
-                    ))}
+                          <Badge
+                            variant="secondary"
+                            className="bg-slate-100 text-slate-900 border border-slate-200 font-extrabold text-xs sm:text-sm px-3 py-1 rounded-xl shrink-0"
+                          >
+                            {voto.CantidadVotos} Votos
+                          </Badge>
+                        </div>
+                      ),
+                    )}
                   </div>
                 </div>
               ) : null}
@@ -359,7 +443,8 @@ export function DashboardTable() {
               {/* Imagenes Grid */}
               <div className="flex flex-col gap-3 pt-1">
                 <span className="font-extrabold text-slate-900 text-sm">
-                  Evidencias Gráficas ({selectedMesa.imagenesPlanillones.length}):
+                  Evidencias Gráficas ({selectedMesa.imagenesPlanillones.length}
+                  ):
                 </span>
                 {selectedMesa.imagenesPlanillones.length > 0 ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -371,7 +456,11 @@ export function DashboardTable() {
                         rel="noopener noreferrer"
                         className="relative rounded-2xl overflow-hidden border border-slate-200 h-36 bg-slate-100 group block shadow-2xs"
                       >
-                        <img src={img.RutaArchivo} alt={img.NombreOriginal} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                        <img
+                          src={img.RutaArchivo}
+                          alt={img.NombreOriginal}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
                         <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-bold text-xs gap-1.5">
                           <Eye className="size-5" />
                           <span>Ver Acta</span>
@@ -380,7 +469,9 @@ export function DashboardTable() {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-slate-400 italic">No existen fotografías registradas.</p>
+                  <p className="text-slate-400 italic">
+                    No existen fotografías registradas.
+                  </p>
                 )}
               </div>
             </div>

@@ -6,9 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import axios from "axios";
 import { conteoSchema, ConteoFormValues } from "../schemas/conteo.schema";
-import { getPartidosService, registrarVotosService } from "../services/conteo.service";
+import {
+  getPartidosService,
+  registrarVotosService,
+} from "../services/conteo.service";
 import { Partido, RegistroVotosErrorResponse } from "../types/conteo.types";
 import { useAuth } from "@/modules/auth";
+import { useRouter } from "next/navigation";
 
 export function useConteoForm() {
   const { user, token } = useAuth();
@@ -32,11 +36,20 @@ export function useConteoForm() {
 
   const { control, setValue, handleSubmit } = form;
 
+  useEffect(() => {
+    if (user?.mesa?.Electores_Por_Mesa) {
+      setValue("totalCiudadanos", user.mesa.Electores_Por_Mesa);
+    }
+  }, [user?.mesa.Electores_Por_Mesa]);
+
   const votosBlanco = Number(useWatch({ control, name: "votosBlanco" })) || 0;
   const votosNulos = Number(useWatch({ control, name: "votosNulos" })) || 0;
-  const votosImpugnados = Number(useWatch({ control, name: "votosImpugnados" })) || 0;
-  const votosImpugnadosSp = Number(useWatch({ control, name: "votosImpugnadosSp" })) || 0;
-  const totalCiudadanos = Number(useWatch({ control, name: "totalCiudadanos" })) || 0;
+  const votosImpugnados =
+    Number(useWatch({ control, name: "votosImpugnados" })) || 0;
+  const votosImpugnadosSp =
+    Number(useWatch({ control, name: "votosImpugnadosSp" })) || 0;
+  const totalCiudadanos =
+    Number(useWatch({ control, name: "totalCiudadanos" })) || 0;
   const votosPartidosMap = useWatch({ control, name: "votosPartidos" }) || {};
 
   useEffect(() => {
@@ -63,23 +76,36 @@ export function useConteoForm() {
     loadPartidos();
   }, [token, setValue]);
 
-  const subtotalNoPreferenciales = votosBlanco + votosNulos + votosImpugnados + votosImpugnadosSp;
+  const subtotalNoPreferenciales =
+    votosBlanco + votosNulos + votosImpugnados + votosImpugnadosSp;
 
-  const totalVotosValidosPartidos = Object.values(votosPartidosMap).reduce<number>(
-    (acc, curr) => acc + (Number(curr) || 0),
-    0
-  );
+  const totalVotosValidosPartidos = Object.values(
+    votosPartidosMap,
+  ).reduce<number>((acc, curr) => acc + (Number(curr) || 0), 0);
 
-  const totalVotosIngresados = totalVotosValidosPartidos + subtotalNoPreferenciales;
+  const totalVotosIngresados =
+    totalVotosValidosPartidos + subtotalNoPreferenciales;
   const diferenciaActa = totalCiudadanos - totalVotosIngresados;
   const isActaCuadrada = totalVotosIngresados === totalCiudadanos;
 
-  const incrementCounter = (fieldName: "votosBlanco" | "votosNulos" | "votosImpugnados" | "votosImpugnadosSp") => {
+  const incrementCounter = (
+    fieldName:
+      | "votosBlanco"
+      | "votosNulos"
+      | "votosImpugnados"
+      | "votosImpugnadosSp",
+  ) => {
     const currentValue = Number(form.getValues(fieldName)) || 0;
     setValue(fieldName, currentValue + 1);
   };
 
-  const decrementCounter = (fieldName: "votosBlanco" | "votosNulos" | "votosImpugnados" | "votosImpugnadosSp") => {
+  const decrementCounter = (
+    fieldName:
+      | "votosBlanco"
+      | "votosNulos"
+      | "votosImpugnados"
+      | "votosImpugnadosSp",
+  ) => {
     const currentValue = Number(form.getValues(fieldName)) || 0;
     if (currentValue > 0) {
       setValue(fieldName, currentValue - 1);
@@ -98,6 +124,8 @@ export function useConteoForm() {
     }
   };
 
+  const router = useRouter();
+
   const onSubmit = handleSubmit(async (values) => {
     setIsSubmitting(true);
     try {
@@ -105,16 +133,19 @@ export function useConteoForm() {
       toast.success("Registro de Votos", {
         description: response.message || "Votos registrados correctamente",
       });
+      router.push("/imagenes");
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.data) {
         const errorData = error.response.data as RegistroVotosErrorResponse;
-        const errorMessage = errorData.message || "Ocurrió un error al registrar los votos";
+        const errorMessage =
+          errorData.message || "Ocurrió un error al registrar los votos";
         toast.error("Error al Registrar Votos", {
           description: errorMessage,
         });
       } else {
         toast.error("Error de Conexión", {
-          description: "Ocurrió un error al intentar comunicarse con el servidor.",
+          description:
+            "Ocurrió un error al intentar comunicarse con el servidor.",
         });
       }
     } finally {
