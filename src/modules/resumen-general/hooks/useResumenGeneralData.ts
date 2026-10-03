@@ -28,7 +28,8 @@ export function useResumenGeneralData() {
       setData(responseData);
     } catch (error: unknown) {
       const errorMessage = axios.isAxiosError(error)
-        ? error.response?.data?.message || "Error al cargar los datos de resumen general"
+        ? error.response?.data?.message ||
+          "Error al cargar los datos de resumen general"
         : "Ocurrió un error inesperado al conectar con el servidor";
 
       toast.error("Error de carga", {
@@ -45,7 +46,7 @@ export function useResumenGeneralData() {
 
   const distritos = useMemo(() => {
     const list = Array.from(
-      new Set(data.map((item) => item.Distrito).filter(Boolean))
+      new Set(data.map((item) => item.Distrito).filter(Boolean)),
     ).sort();
     return ["TODOS", ...list];
   }, [data]);
@@ -55,8 +56,8 @@ export function useResumenGeneralData() {
       new Set(
         data
           .map((item) => item.EstadoActa)
-          .filter((val): val is string => Boolean(val))
-      )
+          .filter((val): val is string => Boolean(val)),
+      ),
     ).sort();
     return ["TODOS", ...list];
   }, [data]);
@@ -106,7 +107,7 @@ export function useResumenGeneralData() {
         totalElectores: 0,
         totalCiudadanosVotaron: 0,
         totalVotosValidos: 0,
-      }
+      },
     );
   }, [filteredData]);
 

@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, RotateCcw, RefreshCw } from "lucide-react";
+import { Search, RotateCcw, RefreshCw, Download } from "lucide-react";
 import { ResumenGeneralFiltersProps } from "./ResumenGeneralFilters.types";
 import { useResumenGeneralFilters } from "./useResumenGeneralFilters";
 
@@ -11,7 +11,9 @@ export function ResumenGeneralFilters({
   estadosActa,
   onFilterChange,
   onRefresh,
+  onExportExcel,
   isLoading,
+  isExporting,
 }: ResumenGeneralFiltersProps) {
   const { form, handleReset } = useResumenGeneralFilters({ onFilterChange });
   const { register } = form;
@@ -52,7 +54,7 @@ export function ResumenGeneralFilters({
           </select>
         </div>
 
-        <div className="flex items-center gap-2 justify-end">
+        <div className="flex items-center gap-2 justify-end flex-wrap">
           <Button
             type="button"
             variant="outline"
@@ -75,8 +77,20 @@ export function ResumenGeneralFilters({
             <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
             Actualizar
           </Button>
+
+          <Button
+            type="button"
+            size="sm"
+            onClick={onExportExcel}
+            disabled={isLoading || isExporting}
+            className="gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white"
+          >
+            <Download className={`h-3.5 w-3.5 ${isExporting ? "animate-bounce" : ""}`} />
+            {isExporting ? "Exportando..." : "Exportar Excel"}
+          </Button>
         </div>
       </div>
     </div>
   );
 }
+

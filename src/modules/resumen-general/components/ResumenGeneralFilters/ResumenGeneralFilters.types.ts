@@ -5,5 +5,8 @@ export interface ResumenGeneralFiltersProps {
   estadosActa: string[];
   onFilterChange: (filters: ResumenGeneralFilters) => void;
   onRefresh: () => void;
+  onExportExcel: () => void;
   isLoading: boolean;
+  isExporting: boolean;
 }
+

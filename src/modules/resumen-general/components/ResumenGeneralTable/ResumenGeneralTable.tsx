@@ -5,9 +5,11 @@ import { ResumenGeneralTableProps } from "./ResumenGeneralTable.types";
 import { useResumenGeneralTable } from "./useResumenGeneralTable";
 
 export function ResumenGeneralTable({ data }: ResumenGeneralTableProps) {
-  const { parentRef, virtualItems, totalSize } = useResumenGeneralTable({
-    data,
-  });
+  const { parentRef, virtualItems, totalSize, totals } = useResumenGeneralTable(
+    {
+      data,
+    },
+  );
 
   if (data.length === 0) {
     return (
@@ -27,10 +29,7 @@ export function ResumenGeneralTable({ data }: ResumenGeneralTableProps) {
 
   return (
     <div className="w-full border border-border/60 rounded-xl overflow-hidden bg-card shadow-xs">
-      <div
-        ref={parentRef}
-        className="overflow-auto h-[600px] relative w-full"
-      >
+      <div ref={parentRef} className="overflow-auto h-[600px] relative w-full">
         <table className="w-full text-xs text-left border-collapse">
           <thead className="bg-muted/90 backdrop-blur text-muted-foreground uppercase tracking-wider font-semibold border-b border-border/60 sticky top-0 z-10">
             <tr>
@@ -103,11 +102,17 @@ export function ResumenGeneralTable({ data }: ResumenGeneralTableProps) {
                   </td>
                   <td className="p-3 text-center">
                     {item.EstadoActa ? (
-                      <Badge variant="outline" className="text-[10px] px-2 py-0.5">
+                      <Badge
+                        variant="outline"
+                        className="text-[10px] px-2 py-0.5"
+                      >
                         {item.EstadoActa}
                       </Badge>
                     ) : (
-                      <Badge variant="secondary" className="text-[10px] px-2 py-0.5 opacity-60">
+                      <Badge
+                        variant="secondary"
+                        className="text-[10px] px-2 py-0.5 opacity-60"
+                      >
                         Pendiente
                       </Badge>
                     )}
@@ -121,11 +126,62 @@ export function ResumenGeneralTable({ data }: ResumenGeneralTableProps) {
               </tr>
             )}
           </tbody>
+          <tfoot className="bg-slate-900 text-white font-bold sticky bottom-0 z-10 border-t-2 border-slate-700 shadow-md">
+            <tr>
+              <td className="p-3 uppercase text-xs tracking-wider" colSpan={3}>
+                TOTAL GENERAL
+              </td>
+              <td className="p-3 text-right font-mono">
+                {totals.Electores_Por_Mesa.toLocaleString("es-PE")}
+              </td>
+              <td className="p-3 text-right font-mono">
+                {totals.APRA.toLocaleString("es-PE")}
+              </td>
+              <td className="p-3 text-right font-mono">
+                {totals.AvanzaPais.toLocaleString("es-PE")}
+              </td>
+              <td className="p-3 text-right font-mono">
+                {totals.PP.toLocaleString("es-PE")}
+              </td>
+              <td className="p-3 text-right font-mono">
+                {totals.PP1.toLocaleString("es-PE")}
+              </td>
+              <td className="p-3 text-right font-mono">
+                {totals.PPP.toLocaleString("es-PE")}
+              </td>
+              <td className="p-3 text-right font-mono">
+                {totals.RP.toLocaleString("es-PE")}
+              </td>
+              <td className="p-3 text-right font-mono">
+                {totals.SomosPeru.toLocaleString("es-PE")}
+              </td>
+              <td className="p-3 text-right font-mono">
+                {totals.TierraVerde.toLocaleString("es-PE")}
+              </td>
+              <td className="p-3 text-right font-mono text-slate-300">
+                {totals.VotosBlancos.toLocaleString("es-PE")}
+              </td>
+              <td className="p-3 text-right font-mono text-slate-300">
+                {totals.VotosNulos.toLocaleString("es-PE")}
+              </td>
+              <td className="p-3 text-right font-mono text-slate-300">
+                {totals.VotosImpugnados.toLocaleString("es-PE")}
+              </td>
+              <td className="p-3 text-right font-mono text-emerald-400">
+                {totals.TotalVotosValidos.toLocaleString("es-PE")}
+              </td>
+              <td className="p-3 text-right font-mono text-blue-400">
+                {totals.TotalCiudadanosVotaron.toLocaleString("es-PE")}
+              </td>
+              <td className="p-3 text-center text-slate-400">-</td>
+            </tr>
+          </tfoot>
         </table>
       </div>
       <div className="bg-muted/40 border-t border-border/60 px-4 py-2 text-xs text-muted-foreground flex justify-between items-center">
         <span>
-          Mostrando <strong className="text-foreground">{data.length}</strong> mesas registradas
+          Mostrando <strong className="text-foreground">{data.length}</strong>{" "}
+          mesas registradas
         </span>
         <span className="text-[11px] opacity-70">
           Tabla virtualizada activada
