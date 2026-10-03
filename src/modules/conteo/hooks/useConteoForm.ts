@@ -15,12 +15,12 @@ import { useAuth } from "@/modules/auth";
 import { useRouter } from "next/navigation";
 
 export function useConteoForm() {
-  const { user, token } = useAuth();
+  const { user, token, selectedMesa, nroMesa } = useAuth();
   const [partidos, setPartidos] = useState<Partido[]>([]);
   const [isLoadingPartidos, setIsLoadingPartidos] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const electoresDefault = user?.mesa?.Electores_Por_Mesa ?? 248;
+  const electoresDefault = selectedMesa?.Electores_Por_Mesa ?? user?.mesa?.Electores_Por_Mesa ?? 248;
 
   const form = useForm<ConteoFormValues>({
     resolver: zodResolver(conteoSchema) as any,
@@ -31,16 +31,20 @@ export function useConteoForm() {
       votosImpugnados: 0,
       votosImpugnadosSp: 0,
       votosPartidos: {},
+      nroMesa: nroMesa || 0,
     },
   });
 
   const { control, setValue, handleSubmit } = form;
 
   useEffect(() => {
-    if (user?.mesa?.Electores_Por_Mesa) {
-      setValue("totalCiudadanos", user.mesa.Electores_Por_Mesa);
+    if (selectedMesa?.Electores_Por_Mesa) {
+      setValue("totalCiudadanos", selectedMesa.Electores_Por_Mesa);
     }
-  }, [user?.mesa.Electores_Por_Mesa]);
+    if (nroMesa) {
+      setValue("nroMesa", nroMesa);
+    }
+  }, [selectedMesa, nroMesa, setValue]);
 
   const votosBlanco = Number(useWatch({ control, name: "votosBlanco" })) || 0;
   const votosNulos = Number(useWatch({ control, name: "votosNulos" })) || 0;
@@ -129,7 +133,10 @@ export function useConteoForm() {
   const onSubmit = handleSubmit(async (values) => {
     setIsSubmitting(true);
     try {
-      const response = await registrarVotosService(values, token || undefined);
+      const response = await registrarVotosService(
+        { ...values, nroMesa: nroMesa || values.nroMesa },
+        token || undefined
+      );
       toast.success("Registro de Votos", {
         description: response.message || "Votos registrados correctamente",
       });
@@ -156,6 +163,7 @@ export function useConteoForm() {
   return {
     form,
     user,
+    selectedMesa,
     partidos,
     isLoadingPartidos,
     isSubmitting,

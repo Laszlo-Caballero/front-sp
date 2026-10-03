@@ -10,6 +10,7 @@ export const conteoSchema = z.object({
     z.string(),
     z.coerce.number().min(0, "El valor no puede ser negativo")
   ),
+  nroMesa: z.coerce.number({ message: "El número de mesa es requerido" }),
 });
 
 export type ConteoFormValues = z.infer<typeof conteoSchema>;

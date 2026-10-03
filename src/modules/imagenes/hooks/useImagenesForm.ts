@@ -12,7 +12,7 @@ import { EvidenciaImagenItem, TransmitirActaErrorResponse, ActaImagenExistente }
 import { useAuth } from "@/modules/auth";
 
 export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
-  const { user, token } = useAuth();
+  const { user, token, selectedMesa, nroMesa } = useAuth();
   const router = useRouter();
   const [imagenes, setImagenes] = useState<EvidenciaImagenItem[]>([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
@@ -44,9 +44,14 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
         return;
       }
 
+      if (!nroMesa) {
+        setIsLoadingInitial(false);
+        return;
+      }
+
       try {
         setIsLoadingInitial(true);
-        const data = await getActasService(token || undefined);
+        const data = await getActasService(nroMesa, token || undefined);
         if (data && data.length > 0) {
           const items: EvidenciaImagenItem[] = data.map((acta, idx) => ({
             id: `existente-${acta.IdImagen}`,
@@ -58,14 +63,14 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
           setImagenes(items);
         }
       } catch {
-        // Si no existen actas previas o falla la carga inicial, se inicia vacío de forma silenciosa
+        // Silencioso en caso de no contar con actas previas
       } finally {
         setIsLoadingInitial(false);
       }
     }
 
     loadInitialActas();
-  }, [initialActas, token]);
+  }, [initialActas, token, nroMesa]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
@@ -100,7 +105,13 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
   const activeImagen = imagenes[selectedImageIndex] || null;
 
   const onSubmit = handleSubmit(async () => {
-    // Filtrar únicamente los archivos nuevos cargados en el cliente (que tienen la propiedad file)
+    if (!nroMesa) {
+      toast.error("Número de mesa no seleccionado", {
+        description: "Debe seleccionar un número de mesa antes de transmitir las imágenes.",
+      });
+      return;
+    }
+
     const nuevasImagenes = imagenes.filter((img) => !img.isExisting && img.file);
 
     if (nuevasImagenes.length === 0) {
@@ -119,7 +130,7 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
         }
       });
 
-      const response = await subirActasService(formData, token || undefined);
+      const response = await subirActasService(nroMesa, formData, token || undefined);
       toast.success("Transmisión Exitosa", {
         description: response.message || "Acta electoral transmitida correctamente",
       });
@@ -145,6 +156,7 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
   return {
     form,
     user,
+    selectedMesa,
     imagenes,
     activeImagen,
     selectedImageIndex,

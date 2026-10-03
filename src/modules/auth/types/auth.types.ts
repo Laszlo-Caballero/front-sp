@@ -1,18 +1,10 @@
-export interface MesaInfo {
-  Local: string;
-  Distrito: string;
-  Nombre_Local: string;
-  Direccion: string;
-  Numero_Mesa: string;
-  Electores_Por_Mesa: number;
-  DNI_Personero: string;
-}
+import { MesaDetails } from "../../mesa/types/mesa.types";
 
 export interface UserAuthData {
   DNI: string;
   NombreCompleto: string;
   Celular: string;
-  mesa: MesaInfo;
+  mesa?: MesaDetails;
 }
 
 export interface LoginSuccessResponse {

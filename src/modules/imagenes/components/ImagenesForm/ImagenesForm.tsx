@@ -32,6 +32,7 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
   const {
     form,
     user,
+    selectedMesa,
     imagenes,
     activeImagen,
     selectedImageIndex,
@@ -45,8 +46,8 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
     onSubmit,
   } = useImagenesForm(initialActas);
 
-  const mesaNumero = user?.mesa?.Numero_Mesa || "045812";
-  const localNombre = user?.mesa?.Nombre_Local || "I.E. SAN JUAN - TRUJILLO";
+  const mesaNumero = selectedMesa?.Numero_Mesa || user?.mesa?.Numero_Mesa || "Sin seleccionar";
+  const localNombre = selectedMesa?.Nombre_Local || user?.mesa?.Nombre_Local || "Local no especificado";
 
   const triggerGallery = () => {
     fileInputRef.current?.click();
@@ -309,7 +310,7 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
               variant="ghost"
               className="h-11 w-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-semibold text-xs rounded-xl gap-2"
             >
-              <ListRestart className="size-4" />
+              <ListRestart className="size-4 text-slate-500" />
               <span>Volver a Editar Conteo de Votos</span>
             </Button>
           </Link>

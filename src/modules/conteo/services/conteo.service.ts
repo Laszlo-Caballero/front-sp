@@ -18,3 +18,13 @@ export async function registrarVotosService(
   });
   return response.data;
 }
+
+export async function verActaCerradaService(
+  nroMesa: number,
+  token?: string
+): Promise<{ nroMesa: number }> {
+  const response = await instance.get<{ nroMesa: number }>(`/votos/ver-acta-cerrada/${nroMesa}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+  });
+  return response.data;
+}

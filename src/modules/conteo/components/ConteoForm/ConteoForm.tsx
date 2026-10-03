@@ -23,6 +23,7 @@ export function ConteoForm() {
   const {
     form,
     user,
+    selectedMesa,
     partidos,
     isLoadingPartidos,
     isSubmitting,
@@ -40,8 +41,8 @@ export function ConteoForm() {
 
   const { register, watch } = form;
 
-  const mesaNumero = user?.mesa?.Numero_Mesa || "045812";
-  const localNombre = user?.mesa?.Nombre_Local || "I.E. SAN JUAN - TRUJILLO";
+  const mesaNumero = selectedMesa?.Numero_Mesa || user?.mesa?.Numero_Mesa || "Sin seleccionar";
+  const localNombre = selectedMesa?.Nombre_Local || user?.mesa?.Nombre_Local || "Local no especificado";
   const totalCiudadanos = Number(watch("totalCiudadanos")) || 0;
 
   return (
