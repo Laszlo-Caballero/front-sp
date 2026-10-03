@@ -31,7 +31,7 @@ export function useConteoForm() {
       votosImpugnados: 0,
       votosImpugnadosSp: 0,
       votosPartidos: {},
-      nroMesa: nroMesa || 0,
+      nroMesa: nroMesa || "",
     },
   });
 

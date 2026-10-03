@@ -5,7 +5,7 @@ export interface AuthContextType {
   user: UserAuthData | null;
   token: string | null;
   selectedMesa: MesaDetails | null;
-  nroMesa: number | null;
+  nroMesa: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (authData: LoginSuccessResponse) => void;

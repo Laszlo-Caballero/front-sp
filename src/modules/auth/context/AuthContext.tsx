@@ -75,7 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.push("/auth");
   };
 
-  const nroMesa = selectedMesa ? Number(selectedMesa.Numero_Mesa) : null;
+  const nroMesa = selectedMesa ? selectedMesa.Numero_Mesa : null;
 
   return (
     <AuthContext.Provider

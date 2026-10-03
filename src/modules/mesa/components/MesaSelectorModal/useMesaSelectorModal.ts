@@ -26,8 +26,7 @@ export function useMesaSelectorModal(onSuccess?: () => void) {
   const onSubmit = async (values: MesaSelectorFormValues) => {
     setIsLoading(true);
     try {
-      const mesaNum = Number(values.nroMesa);
-      const mesaDetails = await getMesaByNroService(mesaNum, token || undefined);
+      const mesaDetails = await getMesaByNroService(values.nroMesa.trim(), token || undefined);
 
       setMesaSelected(mesaDetails);
       toast.success("Mesa asignada", {

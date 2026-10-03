@@ -20,10 +20,10 @@ export async function registrarVotosService(
 }
 
 export async function verActaCerradaService(
-  nroMesa: number,
+  nroMesa: string,
   token?: string
-): Promise<{ nroMesa: number }> {
-  const response = await instance.get<{ nroMesa: number }>(`/votos/ver-acta-cerrada/${nroMesa}`, {
+): Promise<{ nroMesa: string | number }> {
+  const response = await instance.get<{ nroMesa: string | number }>(`/votos/ver-acta-cerrada/${nroMesa}`, {
     headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   });
   return response.data;

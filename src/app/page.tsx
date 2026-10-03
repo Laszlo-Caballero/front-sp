@@ -13,7 +13,7 @@ export default function Home() {
   const [isVerificandoActa, setIsVerificandoActa] = useState(true);
   const router = useRouter();
 
-  const nroMesa = selectedMesa ? Number(selectedMesa.Numero_Mesa) : null;
+  const nroMesa = selectedMesa ? selectedMesa.Numero_Mesa : null;
 
   useEffect(() => {
     if (isAuthLoading) return;
@@ -27,7 +27,7 @@ export default function Home() {
       try {
         setIsVerificandoActa(true);
         const res = await verActaCerradaService(nroMesa!, token || undefined);
-        if (res.nroMesa !== 0) {
+        if (res.nroMesa !== 0 && res.nroMesa !== "0") {
           router.push("/imagenes");
           return;
         }

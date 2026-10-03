@@ -1,7 +1,7 @@
 import { instance } from "@/lib/axios";
 import { TransmitirActaSuccessResponse, ActaImagenExistente } from "../types/imagenes.types";
 
-export async function getActasService(nroMesa: number, token?: string): Promise<ActaImagenExistente[]> {
+export async function getActasService(nroMesa: string, token?: string): Promise<ActaImagenExistente[]> {
   const response = await instance.get<ActaImagenExistente[]>(`/votos/get-actas/${nroMesa}`, {
     headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   });
@@ -9,7 +9,7 @@ export async function getActasService(nroMesa: number, token?: string): Promise<
 }
 
 export async function subirActasService(
-  nroMesa: number,
+  nroMesa: string,
   formData: FormData,
   token?: string
 ): Promise<TransmitirActaSuccessResponse> {
