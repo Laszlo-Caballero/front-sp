@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useDashboardTable } from "../../hooks/useDashboardTable";
 import { DashboardTableSkeleton } from "../DashboardTableSkeleton";
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,7 @@ import {
   Image as ImageIcon,
   LogOut,
   UserCheck,
+  BarChart3,
 } from "lucide-react";
 
 export function DashboardTable() {
@@ -101,7 +103,7 @@ export function DashboardTable() {
       <Card className="border-slate-200 shadow-sm rounded-2xl bg-white overflow-hidden">
         <CardContent className="p-6 flex flex-col gap-6">
           {/* Header & Filter Controls */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div className="flex flex-col">
               <h1 className="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
                 <FileSpreadsheet className="size-6 text-blue-600" />
@@ -113,37 +115,49 @@ export function DashboardTable() {
               </p>
             </div>
 
-            {/* Search Form */}
-            <form
-              onSubmit={handleSearchSubmit}
-              className="flex items-center gap-2"
-            >
-              <div className="relative flex items-center">
-                <Search className="absolute left-3 size-4 text-slate-400 pointer-events-none" />
-                <Input
-                  type="text"
-                  placeholder="Buscar N° de Mesa..."
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  className="pl-9 pr-8 h-10 w-56 bg-slate-50 border-slate-200 text-xs font-bold focus-visible:ring-blue-600 rounded-xl"
-                />
-                {searchInput ? (
-                  <button
-                    type="button"
-                    onClick={handleClearSearch}
-                    className="absolute right-2.5 text-slate-400 hover:text-slate-600"
-                  >
-                    <X className="size-4" />
-                  </button>
-                ) : null}
-              </div>
-              <Button
-                type="submit"
-                className="h-10 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl px-4"
+            <div className="flex flex-wrap items-center gap-3">
+              <Link href="/dashboard/general">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-10 border-blue-200 bg-blue-50/70 hover:bg-blue-100 text-blue-700 font-bold text-xs rounded-xl px-4 flex items-center gap-2 transition-all shadow-xs"
+                >
+                  <BarChart3 className="size-4 text-blue-600" />
+                  <span>Resumen General</span>
+                </Button>
+              </Link>
+
+              <form
+                onSubmit={handleSearchSubmit}
+                className="flex items-center gap-2"
               >
-                Buscar
-              </Button>
-            </form>
+                <div className="relative flex items-center">
+                  <Search className="absolute left-3 size-4 text-slate-400 pointer-events-none" />
+                  <Input
+                    type="text"
+                    placeholder="Buscar N° de Mesa..."
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    className="pl-9 pr-8 h-10 w-56 bg-slate-50 border-slate-200 text-xs font-bold focus-visible:ring-blue-600 rounded-xl"
+                  />
+                  {searchInput ? (
+                    <button
+                      type="button"
+                      onClick={handleClearSearch}
+                      className="absolute right-2.5 text-slate-400 hover:text-slate-600"
+                    >
+                      <X className="size-4" />
+                    </button>
+                  ) : null}
+                </div>
+                <Button
+                  type="submit"
+                  className="h-10 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl px-4"
+                >
+                  Buscar
+                </Button>
+              </form>
+            </div>
           </div>
 
           {/* Table section */}

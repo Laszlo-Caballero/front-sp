@@ -1,0 +1,1 @@
+export { ResumenGeneralPage } from "./ResumenGeneralPage";

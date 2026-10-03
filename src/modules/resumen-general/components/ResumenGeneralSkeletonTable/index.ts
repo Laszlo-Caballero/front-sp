@@ -1,0 +1,1 @@
+export { ResumenGeneralSkeletonTable } from "./ResumenGeneralSkeletonTable";
