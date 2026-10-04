@@ -9,6 +9,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
   ArrowLeft,
   ShieldCheck,
   Camera,
@@ -18,6 +25,7 @@ import {
   ListRestart,
   Building2,
   LogOut,
+  AlertCircle,
 } from "lucide-react";
 
 export interface ImagenesFormProps {
@@ -39,6 +47,9 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
     removeImagen,
     isLoadingInitial,
     isSubmitting,
+    isConfirmOpen,
+    handleOpenConfirm,
+    handleCloseConfirm,
     onSubmit,
     logout,
     handleCambiarMesa,
@@ -256,11 +267,12 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
         </Button>
       </div>
 
-      <form onSubmit={onSubmit} className="flex flex-col gap-4">
+      <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2.5 mt-2">
           <Button
-            type="submit"
+            type="button"
             disabled={nuevasImagenesCount === 0 || isSubmitting}
+            onClick={handleOpenConfirm}
             className="h-13 w-full bg-slate-900 hover:bg-slate-800 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-extrabold text-xs tracking-wider uppercase rounded-xl shadow-md gap-2 transition-all"
           >
             <CloudUpload className="size-5 text-blue-400" />
@@ -279,6 +291,43 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
           </Link>
         </div>
       </form>
+
+      <Dialog open={isConfirmOpen} onOpenChange={(open) => !open && handleCloseConfirm()}>
+        <DialogContent className="max-w-md bg-white border-slate-200 rounded-2xl p-6">
+          <DialogHeader className="flex flex-col gap-2 items-center text-center">
+            <div className="size-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shadow-xs">
+              <AlertCircle className="size-6" />
+            </div>
+            <DialogTitle className="text-xl font-extrabold text-slate-900">
+              ¿Confirmar transmisión de acta?
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-500">
+              Está a punto de transmitir <strong className="font-bold text-slate-800">{nuevasImagenesCount}</strong> fotografía(s) de evidencia para la Mesa N° {mesaNumero}.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex flex-col gap-2 mt-4">
+            <Button
+              type="button"
+              disabled={isSubmitting}
+              onClick={onSubmit}
+              className="h-12 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide rounded-xl shadow-md gap-2"
+            >
+              <span>{isSubmitting ? "ENVIANDO..." : "CONFIRMAR Y ENVIAR"}</span>
+            </Button>
+
+            <Button
+              type="button"
+              variant="ghost"
+              disabled={isSubmitting}
+              onClick={handleCloseConfirm}
+              className="h-10 w-full text-slate-600 hover:bg-slate-100 font-semibold text-xs rounded-xl"
+            >
+              <span>Cancelar</span>
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

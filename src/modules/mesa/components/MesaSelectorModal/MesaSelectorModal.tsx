@@ -157,11 +157,17 @@ export function MesaSelectorModal({
                 <Input
                   id="nroMesaModal"
                   type="text"
+                  inputMode="numeric"
+                  maxLength={6}
                   placeholder="Ej. 102030"
                   className={`pl-9 h-12 bg-slate-50 border-slate-200 text-slate-900 font-extrabold text-base focus-visible:ring-blue-600 ${
                     errorsSearch.nroMesa ? "border-red-500 bg-red-50/30" : ""
                   }`}
-                  {...registerSearch("nroMesa")}
+                  {...registerSearch("nroMesa", {
+                    onChange: (e) => {
+                      e.target.value = e.target.value.replace(/\D/g, "").slice(0, 6);
+                    },
+                  })}
                 />
               </div>
               {errorsSearch.nroMesa && (

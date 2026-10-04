@@ -18,6 +18,7 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
   const [isLoadingInitial, setIsLoadingInitial] = useState<boolean>(!initialActas);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
 
   const form = useForm<ImagenesFormValues>({
     resolver: zodResolver(imagenesSchema),
@@ -102,6 +103,30 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
 
   const activeImagen = imagenes[selectedImageIndex] || null;
 
+  const handleOpenConfirm = () => {
+    if (!nroMesa) {
+      toast.error("Número de mesa no seleccionado", {
+        description: "Debe seleccionar un número de mesa antes de transmitir las imágenes.",
+      });
+      return;
+    }
+
+    const nuevasImagenes = imagenes.filter((img) => !img.isExisting && img.file);
+
+    if (nuevasImagenes.length === 0) {
+      toast.error("Nuevas imágenes requeridas", {
+        description: "Debe adjuntar al menos una nueva fotografía para realizar el envío.",
+      });
+      return;
+    }
+
+    setIsConfirmOpen(true);
+  };
+
+  const handleCloseConfirm = () => {
+    setIsConfirmOpen(false);
+  };
+
   const onSubmit = handleSubmit(async () => {
     if (!nroMesa) {
       toast.error("Número de mesa no seleccionado", {
@@ -133,6 +158,7 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
         description: response.message || "Acta electoral transmitida correctamente",
       });
 
+      setIsConfirmOpen(false);
       router.push("/");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data) {
@@ -168,6 +194,9 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
     removeImagen,
     isLoadingInitial,
     isSubmitting,
+    isConfirmOpen,
+    handleOpenConfirm,
+    handleCloseConfirm,
     onSubmit,
     logout,
     handleCambiarMesa,
