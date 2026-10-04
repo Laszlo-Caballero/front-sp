@@ -13,7 +13,7 @@ import { getMesaByNroService } from "@/modules/mesa/services/mesa.service";
 import { useAuth } from "@/modules/auth";
 
 export function useMesaSelectorModal(onSuccess?: () => void) {
-  const { token, setMesaSelected, selectedMesa } = useAuth();
+  const { token, setMesaSelected, selectedMesa, logout } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<MesaSelectorFormValues>({
@@ -36,7 +36,7 @@ export function useMesaSelectorModal(onSuccess?: () => void) {
       if (onSuccess) {
         onSuccess();
       }
-    } catch (error: unknown) {
+    } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
         toast.error("Mesa no encontrada", {
           description: "No se encontró información para el número de mesa ingresado.",
@@ -54,6 +54,7 @@ export function useMesaSelectorModal(onSuccess?: () => void) {
   return {
     form,
     isLoading,
+    logout,
     onSubmit: form.handleSubmit(onSubmit),
   };
 }

@@ -27,12 +27,12 @@ export default function Home() {
       try {
         setIsVerificandoActa(true);
         const res = await verActaCerradaService(nroMesa!, token || undefined);
-        if (res.nroMesa !== 0 && res.nroMesa !== "0") {
+        console.log("Verificando acta cerrada:", res);
+        if (res.nroMesa !== "") {
           router.push("/imagenes");
           return;
         }
       } catch {
-        // En caso de error o si no hay acta cerrada, se mantiene en la página de conteo
       } finally {
         setIsVerificandoActa(false);
       }

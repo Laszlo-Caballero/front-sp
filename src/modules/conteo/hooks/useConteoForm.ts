@@ -15,7 +15,7 @@ import { useAuth } from "@/modules/auth";
 import { useRouter } from "next/navigation";
 
 export function useConteoForm() {
-  const { user, token, selectedMesa, nroMesa } = useAuth();
+  const { user, token, selectedMesa, nroMesa, logout, clearMesaSelected } = useAuth();
   const [partidos, setPartidos] = useState<Partido[]>([]);
   const [isLoadingPartidos, setIsLoadingPartidos] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,7 +23,7 @@ export function useConteoForm() {
   const electoresDefault = selectedMesa?.Electores_Por_Mesa ?? user?.mesa?.Electores_Por_Mesa ?? 248;
 
   const form = useForm<ConteoFormValues>({
-    resolver: zodResolver(conteoSchema) as any,
+    resolver: zodResolver(conteoSchema),
     defaultValues: {
       totalCiudadanos: electoresDefault,
       votosBlanco: 0,
@@ -177,5 +177,7 @@ export function useConteoForm() {
     incrementPartidoCounter,
     decrementPartidoCounter,
     onSubmit,
+    logout,
+    clearMesaSelected,
   };
 }

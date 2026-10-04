@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Building2, Search, ArrowRight, ShieldCheck } from "lucide-react";
+import { Building2, Search, ArrowRight, ShieldCheck, LogOut } from "lucide-react";
 
 export interface MesaSelectorModalProps {
   isOpen: boolean;
@@ -23,7 +23,7 @@ export function MesaSelectorModal({
   onOpenChange,
   canClose = false,
 }: MesaSelectorModalProps) {
-  const { form, isLoading, onSubmit } = useMesaSelectorModal(() => {
+  const { form, isLoading, logout, onSubmit } = useMesaSelectorModal(() => {
     if (onOpenChange) {
       onOpenChange(false);
     }
@@ -84,14 +84,26 @@ export function MesaSelectorModal({
             </span>
           </div>
 
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="h-12 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide rounded-xl shadow-md gap-2 mt-1"
-          >
-            <span>{isLoading ? "CONSULTANDO..." : "CONFIRMAR MESA"}</span>
-            <ArrowRight className="size-4" />
-          </Button>
+          <div className="flex flex-col gap-2 mt-1">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="h-12 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide rounded-xl shadow-md gap-2"
+            >
+              <span>{isLoading ? "CONSULTANDO..." : "CONFIRMAR MESA"}</span>
+              <ArrowRight className="size-4" />
+            </Button>
+
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={logout}
+              className="h-10 w-full text-slate-500 hover:text-red-600 hover:bg-red-50 font-semibold text-xs rounded-xl gap-2"
+            >
+              <LogOut className="size-4 text-red-500" />
+              <span>Cerrar Sesión</span>
+            </Button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>
