@@ -20,6 +20,8 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import {
   ShieldCheck,
@@ -36,6 +38,8 @@ import {
   LogOut,
   UserCheck,
   BarChart3,
+  Trash2,
+  AlertTriangle,
 } from "lucide-react";
 
 export function DashboardTable() {
@@ -48,6 +52,10 @@ export function DashboardTable() {
     isLoading,
     selectedMesa,
     setSelectedMesa,
+    mesaToDelete,
+    setMesaToDelete,
+    isDeleting,
+    confirmDeleteVotos,
     handleSearchSubmit,
     handleClearSearch,
     goToPage,
@@ -184,8 +192,11 @@ export function DashboardTable() {
                     <TableHead className="text-white font-extrabold text-xs text-center">
                       EVIDENCIAS
                     </TableHead>
-                    <TableHead className="text-white font-extrabold text-xs text-right">
+                    <TableHead className="text-white font-extrabold text-xs text-center">
                       DETALLES
+                    </TableHead>
+                    <TableHead className="text-white font-extrabold text-xs text-center">
+                      ACCIONES
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -259,8 +270,8 @@ export function DashboardTable() {
                           )}
                         </TableCell>
 
-                        {/* Acciones */}
-                        <TableCell className="text-right">
+                        {/* Detalles */}
+                        <TableCell className="text-center">
                           <Button
                             variant="outline"
                             size="sm"
@@ -270,6 +281,25 @@ export function DashboardTable() {
                             <Eye className="size-3.5 text-blue-600" />
                             <span>Ver</span>
                           </Button>
+                        </TableCell>
+
+                        {/* Acciones - Eliminar */}
+                        <TableCell className="text-center">
+                          {escrutinio ? (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setMesaToDelete(item.Numero_Mesa)}
+                              className="h-8 text-xs font-bold text-red-600 border-red-200 bg-red-50/50 hover:bg-red-100 hover:text-red-700 rounded-xl gap-1"
+                            >
+                              <Trash2 className="size-3.5 text-red-600" />
+                              <span>Eliminar</span>
+                            </Button>
+                          ) : (
+                            <span className="text-xs text-slate-400 font-medium">
+                              -
+                            </span>
+                          )}
                         </TableCell>
                       </TableRow>
                     );
@@ -316,6 +346,48 @@ export function DashboardTable() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Modal Confirm Delete Dialog */}
+      <Dialog
+        open={Boolean(mesaToDelete)}
+        onOpenChange={(open) => !open && setMesaToDelete(null)}
+      >
+        <DialogContent className="max-w-md rounded-3xl bg-white p-6 gap-5 border border-slate-200 shadow-2xl">
+          <DialogHeader className="gap-2">
+            <DialogTitle className="text-lg font-black text-slate-900 flex items-center gap-2">
+              <AlertTriangle className="size-5 text-red-600" />
+              <span>Confirmar Eliminación</span>
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-600">
+              ¿Estás seguro de que deseas eliminar los votos de la mesa{" "}
+              <strong className="text-slate-900">{mesaToDelete}</strong>? Esta
+              acción no se puede deshacer.
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter className="flex items-center justify-end gap-2 pt-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setMesaToDelete(null)}
+              disabled={isDeleting}
+              className="rounded-xl border-slate-300 font-bold text-xs"
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={confirmDeleteVotos}
+              disabled={isDeleting}
+              className="rounded-xl bg-red-600 hover:bg-red-700 font-bold text-white text-xs gap-1.5"
+            >
+              <Trash2 className="size-4" />
+              <span>{isDeleting ? "Eliminando..." : "Confirmar Eliminar"}</span>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Modal Detail Dialog */}
       <Dialog

@@ -2,7 +2,10 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
-import { getResumenVotosService } from "../services/dashboard.service";
+import {
+  getResumenVotosService,
+  deleteVotosService,
+} from "../services/dashboard.service";
 import { MesaResumenItem, ResumenMetadata } from "../types/dashboard.types";
 import { useAuth } from "@/modules/auth";
 
@@ -20,6 +23,8 @@ export function useDashboardTable(initialSearch: string = "02802") {
   const [searchInput, setSearchInput] = useState<string>(initialSearch);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedMesa, setSelectedMesa] = useState<MesaResumenItem | null>(null);
+  const [mesaToDelete, setMesaToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const fetchResumen = useCallback(
     async (currentPage: number, search: string) => {
@@ -69,6 +74,25 @@ export function useDashboardTable(initialSearch: string = "02802") {
     }
   };
 
+  const confirmDeleteVotos = async () => {
+    if (!mesaToDelete) return;
+    try {
+      setIsDeleting(true);
+      await deleteVotosService(mesaToDelete, token || undefined);
+      toast.success("Votos eliminados correctamente", {
+        description: `Se han eliminado los votos registrados para la mesa ${mesaToDelete}.`,
+      });
+      setMesaToDelete(null);
+      fetchResumen(page, searchMesa);
+    } catch {
+      toast.error("Error al eliminar los votos", {
+        description: `No se pudo eliminar los votos de la mesa ${mesaToDelete}.`,
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return {
     data,
     metadata,
@@ -79,6 +103,10 @@ export function useDashboardTable(initialSearch: string = "02802") {
     isLoading,
     selectedMesa,
     setSelectedMesa,
+    mesaToDelete,
+    setMesaToDelete,
+    isDeleting,
+    confirmDeleteVotos,
     handleSearchSubmit,
     handleClearSearch,
     goToPage,
@@ -86,3 +114,4 @@ export function useDashboardTable(initialSearch: string = "02802") {
     logout,
   };
 }
+

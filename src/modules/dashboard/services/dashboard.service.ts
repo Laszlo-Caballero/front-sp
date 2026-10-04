@@ -24,3 +24,17 @@ export async function getResumenVotosService(
   );
   return response.data;
 }
+
+export async function deleteVotosService(
+  nroMesa: string,
+  token?: string
+): Promise<{ message?: string }> {
+  const response = await instance.delete<{ message?: string }>(
+    `/votos/delete/${nroMesa}`,
+    {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    }
+  );
+  return response.data;
+}
+

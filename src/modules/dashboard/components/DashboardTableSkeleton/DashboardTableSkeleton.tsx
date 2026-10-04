@@ -20,7 +20,8 @@ export function DashboardTableSkeleton() {
             <TableHead className="text-white font-bold text-xs text-center">ELECTORES</TableHead>
             <TableHead className="text-white font-bold text-xs text-center">ESTADO ACTA</TableHead>
             <TableHead className="text-white font-bold text-xs text-center">EVIDENCIAS</TableHead>
-            <TableHead className="text-white font-bold text-xs text-right">ACCIONES</TableHead>
+            <TableHead className="text-white font-bold text-xs text-center">DETALLES</TableHead>
+            <TableHead className="text-white font-bold text-xs text-center">ACCIONES</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -37,7 +38,8 @@ export function DashboardTableSkeleton() {
               <TableCell className="text-center"><Skeleton className="h-4 w-12 mx-auto" /></TableCell>
               <TableCell className="text-center"><Skeleton className="h-6 w-24 mx-auto rounded-full" /></TableCell>
               <TableCell className="text-center"><Skeleton className="h-6 w-20 mx-auto rounded-full" /></TableCell>
-              <TableCell className="text-right"><Skeleton className="h-8 w-20 ml-auto rounded-lg" /></TableCell>
+              <TableCell className="text-center"><Skeleton className="h-8 w-16 mx-auto rounded-lg" /></TableCell>
+              <TableCell className="text-center"><Skeleton className="h-8 w-20 mx-auto rounded-lg" /></TableCell>
             </TableRow>
           ))}
         </TableBody>
