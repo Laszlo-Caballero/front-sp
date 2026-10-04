@@ -113,7 +113,6 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
           <ShieldCheck className="size-5 text-blue-400 shrink-0" />
           <div className="flex flex-col">
             <span className="text-xs font-extrabold tracking-wide">Mesa N° {mesaNumero}</span>
-            <span className="text-[11px] text-blue-200 truncate max-w-[200px] sm:max-w-xs">{localNombre}</span>
           </div>
         </div>
       </div>
