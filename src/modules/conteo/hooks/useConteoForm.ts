@@ -130,18 +130,19 @@ export function useConteoForm() {
 
   const router = useRouter();
 
-  const onSubmit = handleSubmit(async (values) => {
+  const onSubmit = handleSubmit(async (values: ConteoFormValues) => {
     setIsSubmitting(true);
     try {
-      const response = await registrarVotosService(
-        { ...values, nroMesa: nroMesa || values.nroMesa },
-        token || undefined
-      );
+      const payload: ConteoFormValues = {
+        ...values,
+        nroMesa: nroMesa || values.nroMesa,
+      };
+      const response = await registrarVotosService(payload, token || undefined);
       toast.success("Registro de Votos", {
         description: response.message || "Votos registrados correctamente",
       });
       router.push("/imagenes");
-    } catch (error: unknown) {
+    } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data) {
         const errorData = error.response.data as RegistroVotosErrorResponse;
         const errorMessage =
