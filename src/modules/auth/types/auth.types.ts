@@ -2,14 +2,14 @@ import { MesaDetails } from "../../mesa/types/mesa.types";
 
 export interface UserAuthData {
   DNI: string;
-  NombreCompleto: string;
-  Celular: string;
+  role: string;
+  NombreCompleto?: string;
+  Celular?: string;
   mesa?: MesaDetails;
 }
 
 export interface LoginSuccessResponse {
   token: string;
-  user: UserAuthData;
 }
 
 export interface LoginErrorResponse {
@@ -17,3 +17,4 @@ export interface LoginErrorResponse {
   message: string;
   status: number;
 }
+

@@ -7,7 +7,6 @@ import { ActaImagenExistente } from "../../types/imagenes.types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   ArrowLeft,
@@ -30,15 +29,12 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
   const {
-    form,
     user,
     selectedMesa,
     imagenes,
     activeImagen,
     selectedImageIndex,
     setSelectedImageIndex,
-    declaracionJurada,
-    setValue,
     handleFileChange,
     removeImagen,
     isLoadingInitial,
@@ -59,6 +55,8 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
     cameraInputRef.current?.click();
   };
 
+  const nuevasImagenesCount = imagenes.filter((img) => !img.isExisting).length;
+
   return (
     <div className="w-full max-w-xl mx-auto flex flex-col gap-4 pb-24">
       <header className="bg-slate-950 text-white rounded-2xl p-3 shadow-lg flex items-center justify-between sticky top-2 z-20">
@@ -69,13 +67,8 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
             </Button>
           </Link>
           <div className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold tracking-wider text-blue-400 uppercase">CUSTODIA ELECTORAL</span>
-              <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] px-1.5 py-0 h-4">
-                ● ONLINE
-              </Badge>
-            </div>
-            <span className="text-[11px] text-slate-400 font-medium">Captura Acta Física</span>
+            <span className="text-xs font-bold tracking-wider text-white uppercase">Evidencia Gráfica</span>
+            <span className="text-[11px] text-slate-400 font-medium">Captura de Acta</span>
           </div>
         </div>
 
@@ -112,34 +105,16 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
             <span className="text-[11px] text-blue-200 truncate max-w-[200px] sm:max-w-xs">{localNombre}</span>
           </div>
         </div>
-        <Badge className="bg-blue-800/80 text-blue-100 border border-blue-600/50 text-[10px] uppercase font-bold tracking-wider px-2 py-1">
-          FASE 2 DE 2: EVIDENCIA GRÁFICA
-        </Badge>
       </div>
 
       <div className="flex items-start gap-3 px-1">
         <div className="size-11 rounded-2xl bg-slate-900 text-white flex items-center justify-center shrink-0 shadow-md">
           <Building2 className="size-6 text-blue-400" />
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col justify-center min-h-[44px]">
           <h1 className="text-lg font-extrabold text-slate-900 leading-tight">
-            Evidencia de Acta Física - Mesa N° {mesaNumero}
+            Evidencia de Acta - Mesa N° {mesaNumero}
           </h1>
-          <span className="text-xs font-semibold text-slate-500">
-            Circunscripción La Libertad • Distrito Trujillo
-          </span>
-        </div>
-      </div>
-
-      <div className="bg-blue-50/80 border border-blue-100 rounded-2xl p-4 flex items-start gap-3">
-        <div className="size-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 mt-0.5">
-          <ShieldCheck className="size-5" />
-        </div>
-        <div className="flex flex-col gap-0.5">
-          <span className="text-xs font-bold text-slate-900">Guía para captura correcta:</span>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            Asegúrese de encuadrar las cuatro esquinas del acta, con buena iluminación y firmas legibles de los miembros de mesa.
-          </p>
         </div>
       </div>
 
@@ -159,15 +134,12 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
             <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md px-3 py-1 rounded-full text-white text-[11px] font-bold border border-slate-700/60 flex items-center gap-1.5">
               <Camera className="size-3.5 text-blue-400" />
               <span>
-                PÁGINA {selectedImageIndex + 1} EN FOCO{" "}
+                PÁGINA {selectedImageIndex + 1}{" "}
                 {activeImagen.isExisting ? "(REGISTRADA)" : "(NUEVA)"}
               </span>
             </div>
 
-            <div className="absolute bottom-3 left-3 right-3 bg-slate-900/85 backdrop-blur-md p-2.5 rounded-xl border border-slate-700/60 flex items-center justify-between text-[11px] text-slate-300">
-              <span className="font-semibold text-white">
-                ● ENFOQUE NÍTIDO • 98% LEGIBILIDAD
-              </span>
+            <div className="absolute bottom-3 right-3 bg-slate-900/85 backdrop-blur-md p-2.5 rounded-xl border border-slate-700/60 flex items-center gap-2 text-[11px] text-slate-300">
               <button
                 type="button"
                 onClick={() => removeImagen(activeImagen.id)}
@@ -186,7 +158,7 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
             <div className="flex flex-col gap-1">
               <span className="text-sm font-bold text-white">Sin fotografías capturadas</span>
               <p className="text-xs text-slate-400 max-w-xs">
-                Utilice la cámara o suba archivos desde su galería para adjuntar la evidencia del acta física.
+                Utilice la cámara o suba archivos desde su galería.
               </p>
             </div>
           </CardContent>
@@ -198,7 +170,7 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
           <span className="text-xs font-bold text-slate-900">
             Fotografías Registradas ({imagenes.length})
           </span>
-          <span className="text-[11px] font-medium text-blue-600">Toca una para inspeccionar</span>
+          <span className="text-[11px] font-medium text-blue-600">Toca una para ver</span>
         </div>
 
         {imagenes.length > 0 ? (
@@ -285,33 +257,14 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
       </div>
 
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
-        <Card className="border-slate-200/90 shadow-xs rounded-2xl bg-white">
-          <CardContent className="p-4 flex items-start gap-3">
-            <Checkbox
-              id="declaracionJurada"
-              checked={declaracionJurada}
-              onCheckedChange={(checked) => setValue("declaracionJurada", Boolean(checked))}
-              className="mt-0.5 size-5 rounded-md border-slate-300 data-[state=checked]:bg-blue-600"
-            />
-            <div className="flex flex-col gap-1">
-              <label htmlFor="declaracionJurada" className="text-xs font-bold text-slate-900 cursor-pointer">
-                Declaración Jurada del Personero / Registrador
-              </label>
-              <p className="text-[11px] text-slate-500 leading-relaxed">
-                Declaro que la fotografía corresponde fielmente al acta de escrutinio firmada en mesa, sin alteraciones ni enmendaduras no consignadas.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-2.5 mt-2">
           <Button
             type="submit"
-            disabled={!declaracionJurada || imagenes.filter((img) => !img.isExisting).length === 0 || isSubmitting}
+            disabled={nuevasImagenesCount === 0 || isSubmitting}
             className="h-13 w-full bg-slate-900 hover:bg-slate-800 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-extrabold text-xs tracking-wider uppercase rounded-xl shadow-md gap-2 transition-all"
           >
             <CloudUpload className="size-5 text-blue-400" />
-            <span>{isSubmitting ? "TRANSMITIENDO..." : "CONFIRMAR Y TRANSMITIR ACTA ELECTORAL"}</span>
+            <span>{isSubmitting ? "GUARDANDO..." : "CONFIRMAR Y TRANSMITIR ACTA"}</span>
           </Button>
 
           <Link href="/" className="w-full">
@@ -321,7 +274,7 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
               className="h-11 w-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-semibold text-xs rounded-xl gap-2"
             >
               <ListRestart className="size-4 text-slate-500" />
-              <span>Volver a Editar Conteo de Votos</span>
+              <span>Volver a Conteo de Votos</span>
             </Button>
           </Link>
         </div>

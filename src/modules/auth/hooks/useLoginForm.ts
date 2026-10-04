@@ -37,7 +37,7 @@ export function useLoginForm() {
       if (response.token) {
         login(response);
         toast.success("Autenticación exitosa", {
-          description: `Bienvenido(a) ${response.user.NombreCompleto}`,
+          description: "Bienvenido al sistema",
         });
         router.push("/");
       }

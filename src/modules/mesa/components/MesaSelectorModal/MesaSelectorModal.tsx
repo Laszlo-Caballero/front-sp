@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Building2, Search, ArrowRight, ShieldCheck, LogOut } from "lucide-react";
+import { Building2, Search, ArrowRight, LogOut, PlusCircle, ArrowLeft } from "lucide-react";
 
 export interface MesaSelectorModalProps {
   isOpen: boolean;
@@ -23,13 +23,30 @@ export function MesaSelectorModal({
   onOpenChange,
   canClose = false,
 }: MesaSelectorModalProps) {
-  const { form, isLoading, logout, onSubmit } = useMesaSelectorModal(() => {
+  const {
+    searchForm,
+    createForm,
+    isLoading,
+    isCreateMode,
+    logout,
+    handleCancelCreate,
+    onSubmitSearch,
+    onSubmitCreate,
+  } = useMesaSelectorModal(() => {
     if (onOpenChange) {
       onOpenChange(false);
     }
   });
 
-  const { register, formState: { errors } } = form;
+  const {
+    register: registerSearch,
+    formState: { errors: errorsSearch },
+  } = searchForm;
+
+  const {
+    register: registerCreate,
+    formState: { errors: errorsCreate },
+  } = createForm;
 
   return (
     <Dialog open={isOpen} onOpenChange={canClose ? onOpenChange : () => {}}>
@@ -42,69 +59,138 @@ export function MesaSelectorModal({
             <Building2 className="size-6" />
           </div>
           <DialogTitle className="text-xl font-extrabold text-slate-900">
-            Selección de Mesa de Votación
+            {isCreateMode ? "Registrar Nueva Mesa" : "Selección de Mesa"}
           </DialogTitle>
           <DialogDescription className="text-xs text-slate-500">
-            Ingrese el número de mesa para cargar los datos e iniciar las operaciones de sufragio.
+            {isCreateMode
+              ? "Complete la información requerida para dar de alta la mesa."
+              : "Ingrese el número de mesa para continuar."}
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={onSubmit} className="flex flex-col gap-4 mt-2">
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="nroMesaModal" className="text-xs font-bold text-slate-800">
-              Número de Mesa
-            </label>
-            <div className="relative flex items-center">
-              <div className="absolute left-3 text-slate-400 pointer-events-none">
-                <Search className="size-4" />
-              </div>
+        {isCreateMode ? (
+          <form onSubmit={onSubmitCreate} className="flex flex-col gap-4 mt-2">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="createNroMesa" className="text-xs font-bold text-slate-800">
+                Número de Mesa
+              </label>
               <Input
-                id="nroMesaModal"
+                id="createNroMesa"
                 type="text"
-                placeholder="Ej. 102030"
-                className={`pl-9 h-12 bg-slate-50 border-slate-200 text-slate-900 font-extrabold text-base focus-visible:ring-blue-600 ${
-                  errors.nroMesa ? "border-red-500 bg-red-50/30" : ""
-                }`}
-                {...register("nroMesa")}
+                readOnly
+                className="h-11 bg-slate-100 border-slate-200 text-slate-900 font-extrabold text-base cursor-not-allowed opacity-90"
+                {...registerCreate("nroMesa")}
               />
+              {errorsCreate.nroMesa && (
+                <p className="text-xs text-red-500 font-medium">{errorsCreate.nroMesa.message}</p>
+              )}
             </div>
-            {errors.nroMesa ? (
-              <p className="text-xs text-red-500 font-medium">{errors.nroMesa.message}</p>
-            ) : (
-              <span className="text-[11px] text-slate-500">
-                Se validará la existencia de la mesa en el padrón electoral.
-              </span>
-            )}
-          </div>
 
-          <div className="bg-blue-50/80 border border-blue-100 rounded-xl p-3 flex items-center gap-2.5">
-            <ShieldCheck className="size-4 text-blue-600 shrink-0" />
-            <span className="text-[11px] text-slate-700">
-              Esta mesa se guardará localmente para la posterior transmisión de votos y actas.
-            </span>
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="createDistrito" className="text-xs font-bold text-slate-800">
+                Distrito
+              </label>
+              <Input
+                id="createDistrito"
+                type="text"
+                placeholder="Ej. Trujillo"
+                className={`h-11 bg-slate-50 border-slate-200 text-slate-900 font-medium text-sm focus-visible:ring-blue-600 ${
+                  errorsCreate.distrito ? "border-red-500 bg-red-50/30" : ""
+                }`}
+                {...registerCreate("distrito")}
+              />
+              {errorsCreate.distrito && (
+                <p className="text-xs text-red-500 font-medium">{errorsCreate.distrito.message}</p>
+              )}
+            </div>
 
-          <div className="flex flex-col gap-2 mt-1">
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="h-12 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide rounded-xl shadow-md gap-2"
-            >
-              <span>{isLoading ? "CONSULTANDO..." : "CONFIRMAR MESA"}</span>
-              <ArrowRight className="size-4" />
-            </Button>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="createCapacidad" className="text-xs font-bold text-slate-800">
+                Capacidad (Electores por Mesa)
+              </label>
+              <Input
+                id="createCapacidad"
+                type="number"
+                min={1}
+                placeholder="Ej. 299"
+                className={`h-11 bg-slate-50 border-slate-200 text-slate-900 font-medium text-sm focus-visible:ring-blue-600 ${
+                  errorsCreate.capacidad ? "border-red-500 bg-red-50/30" : ""
+                }`}
+                {...registerCreate("capacidad", { valueAsNumber: true })}
+              />
+              {errorsCreate.capacidad && (
+                <p className="text-xs text-red-500 font-medium">{errorsCreate.capacidad.message}</p>
+              )}
+            </div>
 
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={logout}
-              className="h-10 w-full text-slate-500 hover:text-red-600 hover:bg-red-50 font-semibold text-xs rounded-xl gap-2"
-            >
-              <LogOut className="size-4 text-red-500" />
-              <span>Cerrar Sesión</span>
-            </Button>
-          </div>
-        </form>
+            <div className="flex flex-col gap-2 mt-2">
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="h-12 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide rounded-xl shadow-md gap-2"
+              >
+                <PlusCircle className="size-4" />
+                <span>{isLoading ? "REGISTRANDO..." : "REGISTRAR Y SELECCIONAR"}</span>
+              </Button>
+
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={handleCancelCreate}
+                className="h-10 w-full text-slate-600 hover:bg-slate-100 font-semibold text-xs rounded-xl gap-2"
+              >
+                <ArrowLeft className="size-4 text-slate-500" />
+                <span>Volver a Buscar</span>
+              </Button>
+            </div>
+          </form>
+        ) : (
+          <form onSubmit={onSubmitSearch} className="flex flex-col gap-4 mt-2">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="nroMesaModal" className="text-xs font-bold text-slate-800">
+                Número de Mesa
+              </label>
+              <div className="relative flex items-center">
+                <div className="absolute left-3 text-slate-400 pointer-events-none">
+                  <Search className="size-4" />
+                </div>
+                <Input
+                  id="nroMesaModal"
+                  type="text"
+                  placeholder="Ej. 102030"
+                  className={`pl-9 h-12 bg-slate-50 border-slate-200 text-slate-900 font-extrabold text-base focus-visible:ring-blue-600 ${
+                    errorsSearch.nroMesa ? "border-red-500 bg-red-50/30" : ""
+                  }`}
+                  {...registerSearch("nroMesa")}
+                />
+              </div>
+              {errorsSearch.nroMesa && (
+                <p className="text-xs text-red-500 font-medium">{errorsSearch.nroMesa.message}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-2 mt-1">
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="h-12 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm tracking-wide rounded-xl shadow-md gap-2"
+              >
+                <span>{isLoading ? "CONSULTANDO..." : "CONFIRMAR MESA"}</span>
+                <ArrowRight className="size-4" />
+              </Button>
+
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={logout}
+                className="h-10 w-full text-slate-500 hover:text-red-600 hover:bg-red-50 font-semibold text-xs rounded-xl gap-2"
+              >
+                <LogOut className="size-4 text-red-500" />
+                <span>Cerrar Sesión</span>
+              </Button>
+            </div>
+          </form>
+        )}
       </DialogContent>
     </Dialog>
   );

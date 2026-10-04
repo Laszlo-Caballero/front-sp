@@ -33,16 +33,11 @@ export function ResumenGeneralPage() {
             <ShieldCheck className="size-6 text-emerald-400" />
           </div>
           <div className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-black tracking-wider text-blue-400 uppercase">
-                CUSTODIA ELECTORAL
-              </span>
-              <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] px-2 py-0.5">
-                ● ONLINE
-              </Badge>
-            </div>
+            <span className="text-sm font-black tracking-wider text-white uppercase">
+              Resumen General
+            </span>
             <span className="text-xs text-slate-400 font-medium">
-              Consolidado General y Reporte de Votos
+              Reporte de Votos
             </span>
           </div>
         </div>
@@ -50,7 +45,7 @@ export function ResumenGeneralPage() {
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex flex-col text-right">
             <span className="text-xs font-bold text-white">
-              {user?.NombreCompleto || "Personero Acreditado"}
+              {user?.NombreCompleto || "Usuario"}
             </span>
             <span className="text-[11px] text-slate-400">
               DNI: {user?.DNI || "--------"}
@@ -76,7 +71,7 @@ export function ResumenGeneralPage() {
               Resumen General de Votos
             </h1>
             <p className="text-slate-500 text-xs mt-1">
-              Consolidado en tiempo real de mesas de votación y conteo de votos.
+              Consolidado de mesas de votación y conteo de votos.
             </p>
           </div>
 

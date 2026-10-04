@@ -183,9 +183,6 @@ export function ResumenGeneralTable({ data }: ResumenGeneralTableProps) {
           Mostrando <strong className="text-foreground">{data.length}</strong>{" "}
           mesas registradas
         </span>
-        <span className="text-[11px] opacity-70">
-          Tabla virtualizada activada
-        </span>
       </div>
     </div>
   );

@@ -19,13 +19,12 @@ export function useConteoForm() {
   const [partidos, setPartidos] = useState<Partido[]>([]);
   const [isLoadingPartidos, setIsLoadingPartidos] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const electoresDefault = selectedMesa?.Electores_Por_Mesa ?? user?.mesa?.Electores_Por_Mesa ?? 248;
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const form = useForm<ConteoFormValues>({
     resolver: zodResolver(conteoSchema),
     defaultValues: {
-      totalCiudadanos: electoresDefault,
+      totalCiudadanos: 0,
       votosBlanco: 0,
       votosNulos: 0,
       votosImpugnados: 0,
@@ -38,23 +37,13 @@ export function useConteoForm() {
   const { control, setValue, handleSubmit } = form;
 
   useEffect(() => {
-    if (selectedMesa?.Electores_Por_Mesa) {
-      setValue("totalCiudadanos", selectedMesa.Electores_Por_Mesa);
-    }
     if (nroMesa) {
       setValue("nroMesa", nroMesa);
     }
-  }, [selectedMesa, nroMesa, setValue]);
+  }, [nroMesa, setValue]);
 
-  const votosBlanco = Number(useWatch({ control, name: "votosBlanco" })) || 0;
-  const votosNulos = Number(useWatch({ control, name: "votosNulos" })) || 0;
-  const votosImpugnados =
-    Number(useWatch({ control, name: "votosImpugnados" })) || 0;
-  const votosImpugnadosSp =
-    Number(useWatch({ control, name: "votosImpugnadosSp" })) || 0;
-  const totalCiudadanos =
-    Number(useWatch({ control, name: "totalCiudadanos" })) || 0;
   const votosPartidosMap = useWatch({ control, name: "votosPartidos" }) || {};
+  const votosImpugnadosSp = Number(useWatch({ control, name: "votosImpugnadosSp" })) || 0;
 
   useEffect(() => {
     async function loadPartidos() {
@@ -80,41 +69,11 @@ export function useConteoForm() {
     loadPartidos();
   }, [token, setValue]);
 
-  const subtotalNoPreferenciales =
-    votosBlanco + votosNulos + votosImpugnados + votosImpugnadosSp;
-
   const totalVotosValidosPartidos = Object.values(
     votosPartidosMap,
   ).reduce<number>((acc, curr) => acc + (Number(curr) || 0), 0);
 
-  const totalVotosIngresados =
-    totalVotosValidosPartidos + subtotalNoPreferenciales;
-  const diferenciaActa = totalCiudadanos - totalVotosIngresados;
-  const isActaCuadrada = totalVotosIngresados === totalCiudadanos;
-
-  const incrementCounter = (
-    fieldName:
-      | "votosBlanco"
-      | "votosNulos"
-      | "votosImpugnados"
-      | "votosImpugnadosSp",
-  ) => {
-    const currentValue = Number(form.getValues(fieldName)) || 0;
-    setValue(fieldName, currentValue + 1);
-  };
-
-  const decrementCounter = (
-    fieldName:
-      | "votosBlanco"
-      | "votosNulos"
-      | "votosImpugnados"
-      | "votosImpugnadosSp",
-  ) => {
-    const currentValue = Number(form.getValues(fieldName)) || 0;
-    if (currentValue > 0) {
-      setValue(fieldName, currentValue - 1);
-    }
-  };
+  const totalVotosIngresados = totalVotosValidosPartidos + votosImpugnadosSp;
 
   const incrementPartidoCounter = (partidoId: number) => {
     const current = Number(form.getValues(`votosPartidos.${partidoId}`)) || 0;
@@ -128,14 +87,40 @@ export function useConteoForm() {
     }
   };
 
+  const incrementImpugnadosSpCounter = () => {
+    const current = Number(form.getValues("votosImpugnadosSp")) || 0;
+    setValue("votosImpugnadosSp", current + 1);
+  };
+
+  const decrementImpugnadosSpCounter = () => {
+    const current = Number(form.getValues("votosImpugnadosSp")) || 0;
+    if (current > 0) {
+      setValue("votosImpugnadosSp", current - 1);
+    }
+  };
+
   const router = useRouter();
 
-  const onSubmit = handleSubmit(async (values: ConteoFormValues) => {
+  const handleOpenConfirm = () => {
+    setIsConfirmOpen(true);
+  };
+
+  const handleCloseConfirm = () => {
+    setIsConfirmOpen(false);
+  };
+
+  const executeSubmit = async (values: ConteoFormValues) => {
     setIsSubmitting(true);
+    setIsConfirmOpen(false);
     try {
       const payload: ConteoFormValues = {
         ...values,
         nroMesa: nroMesa || values.nroMesa,
+        totalCiudadanos: 0,
+        votosBlanco: 0,
+        votosNulos: 0,
+        votosImpugnados: 0,
+        votosImpugnadosSp: Number(values.votosImpugnadosSp) || 0,
       };
       const response = await registrarVotosService(payload, token || undefined);
       toast.success("Registro de Votos", {
@@ -159,7 +144,9 @@ export function useConteoForm() {
     } finally {
       setIsSubmitting(false);
     }
-  });
+  };
+
+  const onSubmit = handleSubmit(executeSubmit);
 
   return {
     form,
@@ -168,15 +155,15 @@ export function useConteoForm() {
     partidos,
     isLoadingPartidos,
     isSubmitting,
-    subtotalNoPreferenciales,
+    isConfirmOpen,
     totalVotosValidosPartidos,
     totalVotosIngresados,
-    diferenciaActa,
-    isActaCuadrada,
-    incrementCounter,
-    decrementCounter,
     incrementPartidoCounter,
     decrementPartidoCounter,
+    incrementImpugnadosSpCounter,
+    decrementImpugnadosSpCounter,
+    handleOpenConfirm,
+    handleCloseConfirm,
     onSubmit,
     logout,
     clearMesaSelected,

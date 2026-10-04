@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, ChangeEvent } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -22,12 +22,11 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
   const form = useForm<ImagenesFormValues>({
     resolver: zodResolver(imagenesSchema),
     defaultValues: {
-      declaracionJurada: false,
+      declaracionJurada: true,
     },
   });
 
-  const { control, setValue, handleSubmit } = form;
-  const declaracionJurada = useWatch({ control, name: "declaracionJurada" }) || false;
+  const { handleSubmit } = form;
 
   useEffect(() => {
     async function loadInitialActas() {
@@ -35,8 +34,8 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
         const items: EvidenciaImagenItem[] = initialActas.map((acta, idx) => ({
           id: `existente-${acta.IdImagen}`,
           previewUrl: acta.RutaArchivo,
-          titulo: `Página ${idx + 1} (${idx === 0 ? "Resultados" : "Firmas y Obs."})`,
-          subtitulo: idx === 0 ? "Escrutinio Registrado" : "Firmas Registradas",
+          titulo: `Página ${idx + 1}`,
+          subtitulo: "Acta Registrada",
           isExisting: true,
         }));
         setImagenes(items);
@@ -56,8 +55,8 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
           const items: EvidenciaImagenItem[] = data.map((acta, idx) => ({
             id: `existente-${acta.IdImagen}`,
             previewUrl: acta.RutaArchivo,
-            titulo: `Página ${idx + 1} (${idx === 0 ? "Resultados" : "Firmas y Obs."})`,
-            subtitulo: idx === 0 ? "Escrutinio Registrado" : "Firmas Registradas",
+            titulo: `Página ${idx + 1}`,
+            subtitulo: "Acta Registrada",
             isExisting: true,
           }));
           setImagenes(items);
@@ -81,8 +80,8 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
         id: `${file.name}-${Date.now()}-${idx}`,
         file,
         previewUrl: URL.createObjectURL(file),
-        titulo: `Página ${currentCount} (${currentCount === 1 ? "Resultados" : "Firmas y Obs."})`,
-        subtitulo: currentCount === 1 ? "Escrutinio validado" : "Firmas detectadas",
+        titulo: `Página ${currentCount}`,
+        subtitulo: "Nueva Captura",
         isExisting: false,
       };
     });
@@ -165,8 +164,6 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
     activeImagen,
     selectedImageIndex,
     setSelectedImageIndex,
-    declaracionJurada,
-    setValue,
     handleFileChange,
     removeImagen,
     isLoadingInitial,

@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sistema de Conteo Rápido - Elecciones 2026",
-  description: "Acceso restringido para coordinadores y personeros acreditados de mesa.",
+  title: "Sistema de Conteo Rápido",
+  description: "Plataforma de registro y consulta de conteo de votos.",
 };
 
 export default function RootLayout({
