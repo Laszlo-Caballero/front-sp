@@ -11,7 +11,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   ArrowLeft,
-  UserCheck,
   ShieldCheck,
   Camera,
   Upload,
@@ -19,6 +18,7 @@ import {
   Trash2,
   ListRestart,
   Building2,
+  LogOut,
 } from "lucide-react";
 
 export interface ImagenesFormProps {
@@ -44,6 +44,8 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
     isLoadingInitial,
     isSubmitting,
     onSubmit,
+    logout,
+    handleCambiarMesa,
   } = useImagenesForm(initialActas);
 
   const mesaNumero = selectedMesa?.Numero_Mesa || user?.mesa?.Numero_Mesa || "Sin seleccionar";
@@ -59,9 +61,8 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
 
   return (
     <div className="w-full max-w-xl mx-auto flex flex-col gap-4 pb-24">
-      {/* Top Header Bar */}
       <header className="bg-slate-950 text-white rounded-2xl p-3 shadow-lg flex items-center justify-between sticky top-2 z-20">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <Link href="/">
             <Button variant="ghost" size="icon" className="size-9 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800">
               <ArrowLeft className="size-5" />
@@ -78,12 +79,31 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
           </div>
         </div>
 
-        <div className="size-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-300">
-          <UserCheck className="size-4" />
+        <div className="flex items-center gap-1.5">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleCambiarMesa}
+            className="text-slate-300 hover:text-white hover:bg-slate-800 gap-1.5 rounded-xl text-xs font-semibold px-2.5 h-8"
+          >
+            <Building2 className="size-3.5 text-blue-400" />
+            <span className="hidden sm:inline">Cambiar Mesa</span>
+          </Button>
+
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={logout}
+            className="text-slate-300 hover:text-white hover:bg-slate-800 gap-1.5 rounded-xl text-xs font-semibold px-2.5 h-8"
+          >
+            <LogOut className="size-3.5 text-red-400" />
+            <span className="hidden sm:inline">Cerrar Sesión</span>
+          </Button>
         </div>
       </header>
 
-      {/* Subheader info card */}
       <div className="bg-blue-950 text-white rounded-xl p-3.5 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-2.5">
           <ShieldCheck className="size-5 text-blue-400 shrink-0" />
@@ -97,7 +117,6 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
         </Badge>
       </div>
 
-      {/* Title Header */}
       <div className="flex items-start gap-3 px-1">
         <div className="size-11 rounded-2xl bg-slate-900 text-white flex items-center justify-center shrink-0 shadow-md">
           <Building2 className="size-6 text-blue-400" />
@@ -112,7 +131,6 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
         </div>
       </div>
 
-      {/* Guide notice */}
       <div className="bg-blue-50/80 border border-blue-100 rounded-2xl p-4 flex items-start gap-3">
         <div className="size-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 mt-0.5">
           <ShieldCheck className="size-5" />
@@ -125,7 +143,6 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
         </div>
       </div>
 
-      {/* Main Preview Container */}
       <Card className="border-slate-200/90 shadow-md rounded-2xl bg-slate-900 text-white overflow-hidden relative min-h-[300px]">
         {isLoadingInitial ? (
           <div className="p-8 flex flex-col items-center justify-center gap-3 min-h-[300px]">
@@ -134,13 +151,11 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
           </div>
         ) : activeImagen ? (
           <div className="relative w-full h-[340px] flex items-center justify-center bg-slate-950">
-            {/* eslint-disable-next-html-element-suppression */}
             <img
               src={activeImagen.previewUrl}
               alt="Preview Acta"
               className="w-full h-full object-contain"
             />
-            {/* Overlay indicators */}
             <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md px-3 py-1 rounded-full text-white text-[11px] font-bold border border-slate-700/60 flex items-center gap-1.5">
               <Camera className="size-3.5 text-blue-400" />
               <span>
@@ -178,7 +193,6 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
         )}
       </Card>
 
-      {/* Thumbnails Strip */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between px-1">
           <span className="text-xs font-bold text-slate-900">
@@ -231,7 +245,6 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
         ) : null}
       </div>
 
-      {/* Hidden inputs for File and Camera */}
       <input
         type="file"
         ref={fileInputRef}
@@ -249,7 +262,6 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
         className="hidden"
       />
 
-      {/* Action Buttons for Gallery / Camera */}
       <div className="grid grid-cols-2 gap-3">
         <Button
           type="button"
@@ -273,7 +285,6 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
       </div>
 
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
-        {/* Declaración Jurada */}
         <Card className="border-slate-200/90 shadow-xs rounded-2xl bg-white">
           <CardContent className="p-4 flex items-start gap-3">
             <Checkbox
@@ -293,7 +304,6 @@ export function ImagenesForm({ initialActas }: ImagenesFormProps) {
           </CardContent>
         </Card>
 
-        {/* Action Buttons */}
         <div className="flex flex-col gap-2.5">
           <Button
             type="submit"

@@ -12,7 +12,7 @@ import { EvidenciaImagenItem, TransmitirActaErrorResponse, ActaImagenExistente }
 import { useAuth } from "@/modules/auth";
 
 export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
-  const { user, token, selectedMesa, nroMesa } = useAuth();
+  const { user, token, selectedMesa, nroMesa, logout, clearMesaSelected } = useAuth();
   const router = useRouter();
   const [imagenes, setImagenes] = useState<EvidenciaImagenItem[]>([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
@@ -20,7 +20,7 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const form = useForm<ImagenesFormValues>({
-    resolver: zodResolver(imagenesSchema) as any,
+    resolver: zodResolver(imagenesSchema),
     defaultValues: {
       declaracionJurada: false,
     },
@@ -63,7 +63,6 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
           setImagenes(items);
         }
       } catch {
-        // Silencioso en caso de no contar con actas previas
       } finally {
         setIsLoadingInitial(false);
       }
@@ -136,7 +135,7 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
       });
 
       router.push("/");
-    } catch (error: unknown) {
+    } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data) {
         const errorData = error.response.data as TransmitirActaErrorResponse;
         const errorMessage = errorData.message || "Error al transmitir las imágenes del acta.";
@@ -153,6 +152,11 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
     }
   });
 
+  const handleCambiarMesa = () => {
+    clearMesaSelected();
+    router.push("/");
+  };
+
   return {
     form,
     user,
@@ -168,5 +172,7 @@ export function useImagenesForm(initialActas?: ActaImagenExistente[]) {
     isLoadingInitial,
     isSubmitting,
     onSubmit,
+    logout,
+    handleCambiarMesa,
   };
 }
